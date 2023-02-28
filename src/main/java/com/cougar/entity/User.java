@@ -24,6 +24,8 @@ import lombok.Data;
 public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Integer id;
+	
 	String password;
 	String fullname;
 	String phone;
