@@ -60,4 +60,14 @@ public class UserRestController {
 	public void delete(@PathVariable("id") Integer id) {
 		userService.deleteById(id);
 	}
+	
+	@GetMapping("/is-admin")
+	public List<User> isAdmin() {
+		return userService.isAdmin();
+	}
+	
+	@GetMapping("/is-user")
+	public List<User> isUser() {
+		return userService.isUser();
+	}
 }

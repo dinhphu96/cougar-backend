@@ -1,5 +1,7 @@
 package com.cougar.service.serviceimpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,11 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 	ShopOrderDAO shopOrderDAO;
 
 	@Override
+	public List<ShopOrder> findAll() {
+		return shopOrderDAO.findAll();
+	}
+
+	@Override
 	public ShopOrder create(ShopOrder so) {
 		// TODO Auto-generated method stub
 		return shopOrderDAO.save(so);
@@ -23,6 +30,8 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 	public ShopOrder findCartByUserId(Integer userId) {
 		// TODO Auto-generated method stub
 		return shopOrderDAO.findCartByUserId(userId);
-	}
 
+	
+
+}
 }

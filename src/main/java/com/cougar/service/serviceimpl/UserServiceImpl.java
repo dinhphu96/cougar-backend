@@ -37,4 +37,15 @@ public class UserServiceImpl implements UserService{
 	public void deleteById(Integer id) {
 		userDAO.deleteById(id);
 	}
+
+	@Override
+	public List<User> isAdmin() {
+		return userDAO.getAllUsersHaveRoleAdmin();
+	}
+
+	@Override
+	public List<User> isUser() {
+		return userDAO.getAllUsersHaveRoleUser();
+	}
+
 }
