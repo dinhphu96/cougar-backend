@@ -16,4 +16,8 @@ public interface UserService {
 
 	void deleteById(Integer id);
 
+	List<User> isAdmin();
+
+	List<User> isUser();
+
 }
