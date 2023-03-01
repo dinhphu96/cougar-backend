@@ -1,7 +1,7 @@
 package com.cougar.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import lombok.Data;
 
 @SuppressWarnings("serial")
@@ -23,7 +26,8 @@ public class OrderDetail implements Serializable {
 	Integer id;
 	Integer qty;
 	Integer price;
-	Date createDate;
+	@Temporal(TemporalType.DATE)
+	Date createDate = new Date();
 
 	@ManyToOne
 	@JoinColumn(name = "product_item_id")
