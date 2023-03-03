@@ -12,4 +12,6 @@ public interface ShopOrderService {
 	
 	List<ShopOrder> findAll();
 
+	void deleteById(Integer id);
+
 }
