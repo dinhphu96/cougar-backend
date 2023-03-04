@@ -34,4 +34,10 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 	
 
 }
+
+	@Override
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		shopOrderDAO.deleteById(id);
+	}
 }
