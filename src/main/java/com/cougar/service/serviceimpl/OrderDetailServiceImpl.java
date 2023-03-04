@@ -38,4 +38,10 @@ public class OrderDetailServiceImpl implements OrderDetailService{
 		orderDetailDAO.deleteById(id);
 	}
 
+	@Override
+	public List<OrderDetail> findAll() {
+		// TODO Auto-generated method stub
+		return orderDetailDAO.findAll();
+	}
+
 }

@@ -45,5 +45,8 @@ public class OrderDetailRestController {
 		orderDetailService.deleteById(id);
 	}
 	
-	
+	@GetMapping("/rest/orderDetails")
+	public List<OrderDetail> getAll() {
+		return orderDetailService.findAll();
+	}
 }
