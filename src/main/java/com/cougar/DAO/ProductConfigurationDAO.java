@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.cougar.entity.ProductConfiguration;
 
-import lombok.Value;
 
 public interface ProductConfigurationDAO extends JpaRepository<ProductConfiguration, Integer>{
 

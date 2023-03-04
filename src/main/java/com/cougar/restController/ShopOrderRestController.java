@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cougar.entity.OrderDetail;
 import com.cougar.entity.ShopOrder;
-import com.cougar.entity.ShopOrderOrderDetail;
+import com.cougar.model.ShopOrderOrderDetail;
 import com.cougar.service.OrderDetailService;
 import com.cougar.service.ShopOrderService;
 
