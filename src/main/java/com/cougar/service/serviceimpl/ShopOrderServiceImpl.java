@@ -40,4 +40,12 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 		// TODO Auto-generated method stub
 		shopOrderDAO.deleteById(id);
 	}
+
+	@Override
+	public ShopOrder updateShopOrder(ShopOrder order) {
+		// TODO Auto-generated method stub
+		return shopOrderDAO.save(order);
+	}
+
+	
 }

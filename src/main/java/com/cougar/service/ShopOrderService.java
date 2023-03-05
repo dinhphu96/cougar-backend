@@ -14,4 +14,7 @@ public interface ShopOrderService {
 
 	void deleteById(Integer id);
 
+	ShopOrder updateShopOrder(ShopOrder order);
+
+
 }

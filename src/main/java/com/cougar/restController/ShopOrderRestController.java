@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
@@ -49,5 +50,10 @@ public class ShopOrderRestController {
 	@DeleteMapping("/rest/shopOrders/{id}")
 	public void deleteById(@PathVariable("id") Integer id) {
 		shopOrderService.deleteById(id);
+	}
+	
+	@PutMapping("/rest/shopOrders/{orderId}")
+	public ShopOrder updateShopOrder(@PathVariable("orderId") Integer orderId,@RequestBody ShopOrder order) {
+		return shopOrderService.updateShopOrder(order);
 	}
 }
