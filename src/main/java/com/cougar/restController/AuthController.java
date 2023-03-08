@@ -55,6 +55,7 @@ public class AuthController {
 												 userDetails.getId(), 
 												 userDetails.getFullname(), 
 												 userDetails.getEmail(), 
+												 userDetails.getAvatar(),
 												 roles));
 	}
 	
