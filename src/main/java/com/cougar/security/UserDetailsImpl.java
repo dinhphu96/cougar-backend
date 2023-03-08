@@ -13,7 +13,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
+<<<<<<< Updated upstream
 @SuppressWarnings("serial")
+=======
+>>>>>>> Stashed changes
 @Data
 public class UserDetailsImpl implements UserDetails {
 
@@ -26,17 +29,27 @@ public class UserDetailsImpl implements UserDetails {
 	private String email;
 	@JsonIgnore
 	private String password;
+<<<<<<< Updated upstream
 	private String avatar;
 	
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UserDetailsImpl(Integer id, String fullname, String email, String password, String avatar,
+=======
+	
+	private Collection<? extends GrantedAuthority> authorities;
+
+	public UserDetailsImpl(Integer id, String fullname, String email, String password,
+>>>>>>> Stashed changes
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.fullname = fullname;
 		this.email = email;
 		this.password = password;
+<<<<<<< Updated upstream
 		this.avatar = avatar;
+=======
+>>>>>>> Stashed changes
 		this.authorities = authorities;
 	}
 	
@@ -49,7 +62,10 @@ public class UserDetailsImpl implements UserDetails {
 				user.getFullname(), 
 				user.getEmail(),
 				user.getPassword(), 
+<<<<<<< Updated upstream
 				user.getAvatar(),
+=======
+>>>>>>> Stashed changes
 				authorities);
 	}
 	

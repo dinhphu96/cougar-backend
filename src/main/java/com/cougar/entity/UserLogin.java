@@ -42,10 +42,19 @@ public class UserLogin {
     @JoinTable(name = "Authorities",
         joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+<<<<<<< Updated upstream
     private List<RoleLogin> roles = new ArrayList<>();
     @JsonIgnore
 	@OneToMany(mappedBy = "user")
 	List<Review> reviews;
+=======
+    private List<RoleRegister> roles = new ArrayList<>();
+    @JsonIgnore
+	@OneToMany(mappedBy = "user")
+	List<Review> reviews;
+    
+    
+>>>>>>> Stashed changes
 	
 
 	@JsonIgnore

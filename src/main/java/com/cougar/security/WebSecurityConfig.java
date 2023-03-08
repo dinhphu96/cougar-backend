@@ -20,7 +20,11 @@ import com.cougar.security.jwt.AuthTokenFilter;
 @Configuration
 //@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+<<<<<<< Updated upstream
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
+=======
+public class WebSecurityConfig {
+>>>>>>> Stashed changes
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
 
@@ -32,10 +36,13 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 		return new AuthTokenFilter();
 	}
 
+<<<<<<< Updated upstream
 //	@Override
 //	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 //		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 //	}
+=======
+>>>>>>> Stashed changes
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
@@ -47,12 +54,15 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 		return authProvider;
 	}
 
+<<<<<<< Updated upstream
 //	@Bean
 //	@Override
 //	public AuthenticationManager authenticationManagerBean() throws Exception {
 //		return super.authenticationManagerBean();
 //	}
 
+=======
+>>>>>>> Stashed changes
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
@@ -63,6 +73,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+<<<<<<< Updated upstream
 //	@Override
 //	protected void configure(HttpSecurity http) throws Exception {
 //		http.cors().and().csrf().disable()
@@ -75,6 +86,8 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 //	}
 
+=======
+>>>>>>> Stashed changes
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
