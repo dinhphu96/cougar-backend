@@ -22,30 +22,27 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 
 	@Override
 	public ShopOrder create(ShopOrder so) {
-		// TODO Auto-generated method stub
 		return shopOrderDAO.save(so);
 	}
 
 	@Override
 	public ShopOrder findCartByUserId(Integer userId) {
-		// TODO Auto-generated method stub
 		return shopOrderDAO.findCartByUserId(userId);
-
-	
-
-}
+	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
 		shopOrderDAO.deleteById(id);
 	}
 
 	@Override
 	public ShopOrder updateShopOrder(ShopOrder order) {
-		// TODO Auto-generated method stub
 		return shopOrderDAO.save(order);
 	}
 
-	
+	@Override
+	public ShopOrder changeStatus(ShopOrder shopOrder) {
+		return shopOrderDAO.save(shopOrder);
+	}
+
 }

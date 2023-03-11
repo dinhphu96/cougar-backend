@@ -16,5 +16,6 @@ public interface ShopOrderService {
 
 	ShopOrder updateShopOrder(ShopOrder order);
 
+	ShopOrder changeStatus(ShopOrder shopOrder);
 
 }

@@ -56,4 +56,9 @@ public class ShopOrderRestController {
 	public ShopOrder updateShopOrder(@PathVariable("orderId") Integer orderId,@RequestBody ShopOrder order) {
 		return shopOrderService.updateShopOrder(order);
 	}
+	
+	@PutMapping("/rest/shopOrders/changeStatus")
+	public ShopOrder changeStatus(@RequestBody ShopOrder shopOrder) {
+		return shopOrderService.changeStatus(shopOrder);
+	}
 }
