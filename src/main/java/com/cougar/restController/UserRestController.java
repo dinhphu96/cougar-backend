@@ -3,6 +3,7 @@ package com.cougar.restController;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,8 @@ public class UserRestController {
 	@Autowired RoleService roleService;
 	@Autowired AuthorityService authorityService;
 	
+	@Autowired PasswordEncoder pe;
+	
 	@GetMapping("")
 	public List<User> getAll() {
 		return userService.findAll();
@@ -41,6 +44,8 @@ public class UserRestController {
 	@PostMapping("")
 	public User post(@RequestBody User user) {
 		Role role = roleService.findById(1); // ADMIN
+		String temp = user.getPassword();
+		user.setPassword(pe.encode(temp));
 		User userCreated = userService.create(user);
 		
 		Authority newAuthority = new Authority();
@@ -53,6 +58,8 @@ public class UserRestController {
 	
 	@PutMapping("")
 	public User update(@RequestBody User user) {
+		String temp = user.getPassword();
+		user.setPassword(pe.encode(temp));
 		return userService.update(user);
 	}
 	
