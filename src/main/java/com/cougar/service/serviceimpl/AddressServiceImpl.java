@@ -17,4 +17,10 @@ public class AddressServiceImpl implements AddressService{
 		// TODO Auto-generated method stub
 		return addressDAO.getAddressesByUsserId(userId);
 	}
+
+	@Override
+	public Address create(Address address) {
+		// TODO Auto-generated method stub
+		return addressDAO.save(address);
+	}
 }
