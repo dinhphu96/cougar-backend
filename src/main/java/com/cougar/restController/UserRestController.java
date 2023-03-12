@@ -77,4 +77,11 @@ public class UserRestController {
 	public List<User> isUser() {
 		return userService.isUser();
 	}
+	
+	@PutMapping("/update/{id}")
+	public User updateUserFromShop(@PathVariable("id") Integer id, @RequestBody User user) {
+		String pass = userService.findById(id).getPassword();
+		user.setPassword(pass);
+		return userService.update(user);
+	}
 }

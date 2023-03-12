@@ -23,4 +23,10 @@ public class AddressServiceImpl implements AddressService{
 		// TODO Auto-generated method stub
 		return addressDAO.save(address);
 	}
+
+	@Override
+	public void delete(Integer id) {
+		// TODO Auto-generated method stub
+		addressDAO.deleteById(id);
+	}
 }

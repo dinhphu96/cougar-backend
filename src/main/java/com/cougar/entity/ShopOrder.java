@@ -31,7 +31,7 @@ public class ShopOrder implements Serializable{
 	@Temporal(TemporalType.DATE)
 	Date createDate = new Date();
 	Integer orderTotal;
-	Boolean orderStatus = null;
+	Integer orderStatus = null;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_payment_method_id")

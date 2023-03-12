@@ -9,5 +9,7 @@ public interface AddressService {
 	List<Address> getAddressesByUsserId(Integer userId);
 
 	Address create(Address address);
+
+	void delete(Integer id);
 	
 }
