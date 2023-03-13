@@ -1,32 +1,73 @@
 package com.cougar.security.jwt;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+
+import com.cougar.entity.RefreshToken;
+import com.cougar.entity.UserLogin;
 import com.cougar.security.SecurityConstants;
-import com.cougar.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.impl.TextCodec;
 
 @Component
 public class JwtUtils {
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+	static final String issuer = "fpt-polytechnic-college";
+	static final String audiencer = "cougars-team";
 
-	public String generateJwtToken(Authentication authentication) {
+	public String generateAccessToken(Authentication authentication) {
 
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
-		return Jwts.builder()
-				.setSubject((userPrincipal.getUsername()))
+		UserLogin userPrincipal = (UserLogin) authentication.getPrincipal();
+		List<String> roles = userPrincipal.getAuthorities().stream()
+	            .map(GrantedAuthority::getAuthority)
+	            .collect(Collectors.toList());
+		List<String> permissions = new ArrayList<>();
+	    if (roles.contains("ADMIN")) {
+	        permissions.addAll(Arrays.asList("create", "read", "update", "delete"));
+	    }
+	    if (roles.contains("USER")) {
+	        permissions.addAll(Arrays.asList("read", "update"));
+	    }
+		JwtBuilder jwtBuilder = Jwts.builder()
+				.claim("userId", userPrincipal.getId())
+				.setSubject(userPrincipal.getEmail())
+				.claim("fullname", userPrincipal.getFullname())
+				.claim("scope", roles)
+				.claim("phone", userPrincipal.getPhone())
+				.claim("permissions", permissions)
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + SecurityConstants.JWT_EXPIRATION))
-				.signWith(SignatureAlgorithm.HS512, SecurityConstants.JWT_SECRET)
+				.setIssuer(issuer)
+				.setAudience(audiencer)
+				.signWith(SignatureAlgorithm.HS256,
+						TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="));	
+	   
+		 return jwtBuilder.compact();
+	}
+
+	public String generateRefreshToken(Authentication authentication, RefreshToken refreshToken) {
+
+		UserLogin userPrincipal = (UserLogin) authentication.getPrincipal();
+		return Jwts.builder()				
+				.setSubject(userPrincipal.getEmail())				
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + SecurityConstants.JWT_REFRESH_TOKEN_EXPIRATION))				
+				.signWith(SignatureAlgorithm.HS256,
+						TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
 				.compact();
 	}
 
-	public String getUserNameFromJwtToken(String token) {
+	public String getUserEmailFromJwtRefreshToken(String token) {
 		return Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token).getBody().getSubject();
 	}
 

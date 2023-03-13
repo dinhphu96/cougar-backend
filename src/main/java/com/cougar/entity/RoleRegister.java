@@ -2,6 +2,7 @@ package com.cougar.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,4 +31,12 @@ public class RoleRegister {
 	        joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
 	        inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	    private List<UserLogin> users = new ArrayList<>();
+	 @Override
+	 public String toString() {
+	     return "RoleRegister{" +
+	             "id=" + id +
+	             ", role='" + name + '\'' +
+	             ", users=" + ((users == null) ? "null" : users.stream().map(UserLogin::getId).collect(Collectors.toList())) +
+	             '}';
+	 }
 }
