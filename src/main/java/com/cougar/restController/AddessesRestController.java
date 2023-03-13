@@ -45,12 +45,12 @@ public class AddessesRestController {
 	@PutMapping("/rest/addresses/setAsDefault")
 	public List<Address> setAsDefault(@RequestBody Address address){
 		List<Address> list = addressService.getAddressesByUsserId(address.getUser().getId());
+		
 		for (Address add : list) {
 			if(add.getIsDefault() == true) {
 				add.setIsDefault(false);
 				addressService.create(add); 
 			}
-			
 		}
 		address.setIsDefault(true);
 		addressService.create(address); 

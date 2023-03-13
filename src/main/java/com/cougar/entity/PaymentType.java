@@ -22,6 +22,7 @@ public class PaymentType implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
 	String value;
+	String icon;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "paymentType")
