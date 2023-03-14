@@ -10,10 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.cougar.entity.RefreshToken;
 import com.cougar.entity.UserLogin;
 import com.cougar.security.SecurityConstants;
 import io.jsonwebtoken.*;
@@ -53,18 +51,6 @@ public class JwtUtils {
 						TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="));	
 	   
 		 return jwtBuilder.compact();
-	}
-
-	public String generateRefreshToken(Authentication authentication, RefreshToken refreshToken) {
-
-		UserLogin userPrincipal = (UserLogin) authentication.getPrincipal();
-		return Jwts.builder()				
-				.setSubject(userPrincipal.getEmail())				
-				.setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + SecurityConstants.JWT_REFRESH_TOKEN_EXPIRATION))				
-				.signWith(SignatureAlgorithm.HS256,
-						TextCodec.BASE64.decode("Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="))
-				.compact();
 	}
 
 	public String getUserEmailFromJwtRefreshToken(String token) {

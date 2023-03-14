@@ -23,14 +23,12 @@ import com.cougar.entity.UserLogin;
 import com.cougar.payload.request.ChangePasswordRequest;
 import com.cougar.payload.request.LoginRequest;
 import com.cougar.payload.response.JwtResponseDto;
-import com.cougar.entity.RefreshToken;
 import com.cougar.entity.RoleRegister;
 import com.cougar.payload.request.RegisterRequest;
 import com.cougar.payload.response.MessageResponse;
 import com.cougar.repository.RoleRegisterDAO;
 import com.cougar.repository.UserLoginDAO;
 import com.cougar.security.jwt.JwtUtils;
-import com.cougar.service.RefreshTokenService;
 import com.cougar.service.UserLoginService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -55,9 +53,6 @@ public class AuthController {
 	RoleRegisterDAO roleRegisterDAO;
 	
 	@Autowired
-	RefreshTokenService refreshTokenService;
-	
-	@Autowired
 	PasswordEncoder pe;
 	
 	@Autowired
@@ -65,19 +60,14 @@ public class AuthController {
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+		
 		try {
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtUtils.generateAccessToken(authentication);
 			UserLogin userDetails = (UserLogin) authentication.getPrincipal();
-			RefreshToken refreshToken = new RefreshToken();	
-			String refreshTokenString = jwtUtils.generateRefreshToken(authentication, refreshToken);
-			refreshToken.setUserLogin(userDetails);
-			refreshToken.setExpiration(new Date());
-			refreshToken.setToken(refreshTokenString);
-			refreshTokenService.save(refreshToken);
-			JwtResponseDto resp = new JwtResponseDto(jwt, refreshTokenString);
+			JwtResponseDto resp = new JwtResponseDto(jwt, userDetails.getId(), userDetails.getFullname(), userDetails.getEmail(), userDetails.getPhone(), userDetails.getAvatar());
 			
 			return ResponseEntity.ok(resp);
 		} catch (BadCredentialsException e) {
