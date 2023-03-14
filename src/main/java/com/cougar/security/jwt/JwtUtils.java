@@ -37,11 +37,8 @@ public class JwtUtils {
 	        permissions.addAll(Arrays.asList("read", "update"));
 	    }
 		JwtBuilder jwtBuilder = Jwts.builder()
-				.claim("userId", userPrincipal.getId())
 				.setSubject(userPrincipal.getEmail())
-				.claim("fullname", userPrincipal.getFullname())
 				.claim("scope", roles)
-				.claim("phone", userPrincipal.getPhone())
 				.claim("permissions", permissions)
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + SecurityConstants.JWT_EXPIRATION))

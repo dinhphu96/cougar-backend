@@ -66,8 +66,10 @@ public class AuthController {
 					new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtUtils.generateAccessToken(authentication);
-			UserLogin userDetails = (UserLogin) authentication.getPrincipal();
-			JwtResponseDto resp = new JwtResponseDto(jwt, userDetails.getId(), userDetails.getFullname(), userDetails.getEmail(), userDetails.getPhone(), userDetails.getAvatar());
+			
+//			UserLogin userDetails = (UserLogin) authentication.getPrincipal();
+			
+			JwtResponseDto resp = new JwtResponseDto(jwt);
 			
 			return ResponseEntity.ok(resp);
 		} catch (BadCredentialsException e) {
