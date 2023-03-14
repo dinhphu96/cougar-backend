@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.cougar.entity.UserLogin;
@@ -34,7 +33,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     try {
-      String jwt = parseJwt(request);
+      String jwt = getToken(request);
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String email = jwtUtils.getUserEmailFromJwtRefreshToken(jwt);
 
@@ -51,13 +50,27 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
-  private String parseJwt(HttpServletRequest request) {
-    String headerAuth = request.getHeader("Authorization");
+//  private String parseJwt(HttpServletRequest request) {
+//    String headerAuth = request.getHeader("Authorization");
+//
+//    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+//      return headerAuth.substring(7, headerAuth.length());
+//    }
+//
+//    return null;
+//  }
+  
+  public String getToken( HttpServletRequest request ) {
+      
+      String authHeader = getAuthHeaderFromHeader( request );
+      if ( authHeader != null && authHeader.startsWith("Bearer ")) {
+          return authHeader.substring(7);
+      }
 
-    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-      return headerAuth.substring(7, headerAuth.length());
-    }
+      return null;
+  }
 
-    return null;
+	public String getAuthHeaderFromHeader( HttpServletRequest request ) {
+      return request.getHeader("Authorization");
   }
 }

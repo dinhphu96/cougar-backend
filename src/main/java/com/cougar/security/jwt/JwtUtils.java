@@ -37,7 +37,6 @@ public class JwtUtils {
 	        permissions.addAll(Arrays.asList("read", "update"));
 	    }
 		JwtBuilder jwtBuilder = Jwts.builder()
-				.claim("id", userPrincipal.getId())
 				.setSubject(userPrincipal.getEmail())
 				.claim("scope", roles)
 				.claim("permissions", permissions)
