@@ -1,16 +1,22 @@
 package com.cougar.restController;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,8 +32,10 @@ import com.cougar.payload.response.JwtResponseDto;
 import com.cougar.entity.RoleRegister;
 import com.cougar.payload.request.RegisterRequest;
 import com.cougar.payload.response.MessageResponse;
+import com.cougar.payload.response.UserInfo;
 import com.cougar.repository.RoleRegisterDAO;
 import com.cougar.repository.UserLoginDAO;
+import com.cougar.security.UserDetailsServiceImpl;
 import com.cougar.security.jwt.JwtUtils;
 import com.cougar.service.UserLoginService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -66,12 +74,19 @@ public class AuthController {
 					new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtUtils.generateAccessToken(authentication);
-			
-//			UserLogin userDetails = (UserLogin) authentication.getPrincipal();
-			
-			JwtResponseDto resp = new JwtResponseDto(jwt);
-			
-			return ResponseEntity.ok(resp);
+			UserLogin userDetails = (UserLogin) authentication.getPrincipal();
+			UserInfo userInfo = new UserInfo(
+					userDetails.getId(),
+					userDetails.getFullname(),
+					userDetails.getEmail(),
+					userDetails.getPhone(),
+					userDetails.getAvatar(),
+					userDetails.getAuthorities()
+					);
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("SHARE_USER", userInfo);
+	        response.put("accessToken", new JwtResponseDto(jwt));			
+			return ResponseEntity.ok(response);
 		} catch (BadCredentialsException e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Incorrect email or password"));
 		} catch (Exception e) {
@@ -106,12 +121,14 @@ public class AuthController {
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	
+
+	
 	@PostMapping("/change-password")
 	public ResponseEntity<?> doChangePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
 	    try {
 	        String email = jwtUtils.getUserEmailFromJwtRefreshToken(changePasswordRequest.getToken());
-	        System.out.println(changePasswordRequest.getToken());
-	        System.out.println(email);
+//	        System.out.println(changePasswordRequest.getToken());
+//	        System.out.println(email);
 	        UserLogin user = userLoginService.findByEmail(email);
 	        System.out.println(user);
 //	        if (user.isPresent()) {
