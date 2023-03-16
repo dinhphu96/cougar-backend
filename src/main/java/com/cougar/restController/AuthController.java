@@ -161,17 +161,17 @@ public class AuthController {
  
         UserLogin user = userLoginService.findByEmail(email.getEmail()); 
         if (user == null) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy người dùng với địa chỉ email này"));
+            return ResponseEntity.badRequest().body(new MessageResponse("No users found with this email address"));
         } 
         String token = UUID.randomUUID().toString();
         resetPasswordTokenService.createResetPasswordTokenForUser(user, token);
  
         String resetPasswordLink = "http://localhost:3000/reset-password?token=" + token;
-        String subject = "Đặt lại mật khẩu";
-        String text = "Nhấp vào đường dẫn sau để đặt lại mật khẩu của bạn: (hiệu lực 5 phút) \\n " + resetPasswordLink;
+        String subject = "Reset Password";
+        String text = "Click the following link to reset your password: (Valid for 5 minutes) \n " + resetPasswordLink;
  
         userLoginService.sendEmail(user.getEmail(), subject, text); 
-        return ResponseEntity.ok().body(new MessageResponse("Một liên kết đặt lại mật khẩu đã được gửi đến email của bạn!"));
+        return ResponseEntity.ok().body(new MessageResponse("Check your email!"));
     }
 	
 	@PostMapping("reset-password")
