@@ -178,13 +178,13 @@ public class AuthController {
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
         ResetPasswordToken resetPasswordToken = resetPasswordTokenService.getResetPasswordToken(req.getToken());
        if (resetPasswordToken == null) {
-        return ResponseEntity.badRequest().body(new MessageResponse("Token không hợp lệ"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Invalid token"));
     } else if (resetPasswordToken.isExpired()) {
-        return ResponseEntity.badRequest().body(new MessageResponse("Token đã hết hạn"));
+        return ResponseEntity.badRequest().body(new MessageResponse("Token has expired"));
     }
         UserLogin userLogin = resetPasswordToken.getUserLogin();
         userLogin.setPassword(pe.encode(req.getPassword()));
         userLoginService.save(userLogin); 
-        return ResponseEntity.ok().body(new MessageResponse("Mật khẩu của bạn đã được đặt lại thành công"));
+        return ResponseEntity.ok().body(new MessageResponse("Your password has been reset successfully"));
     }
 }
