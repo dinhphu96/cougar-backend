@@ -13,9 +13,11 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cougar.entity.OrderDetail;
+import com.cougar.entity.ProductItem;
 import com.cougar.entity.ShopOrder;
 import com.cougar.model.ShopOrderOrderDetail;
 import com.cougar.service.OrderDetailService;
+import com.cougar.service.ProductItemService;
 import com.cougar.service.ShopOrderService;
 
 @CrossOrigin("*")
@@ -26,7 +28,9 @@ public class ShopOrderRestController {
 	ShopOrderService shopOrderService;
 	@Autowired
 	OrderDetailService orderDetailService;
-
+	@Autowired
+	ProductItemService productItemService;
+	
 	@GetMapping("/rest/shopOrders")
 	public List<ShopOrder> getAll() {
 		return shopOrderService.findAll();
@@ -59,6 +63,16 @@ public class ShopOrderRestController {
 	
 	@PutMapping("/rest/shopOrders/changeStatus")
 	public ShopOrder changeStatus(@RequestBody ShopOrder shopOrder) {
+		if (shopOrder.getOrderStatus() == 3) {
+			List<OrderDetail> orderDetails = orderDetailService.findAll();
+			
+			for (OrderDetail orderDetail : orderDetails) {
+				ProductItem prodItem = orderDetail.getProductItem();
+				Integer temp = prodItem.getQtyInStock();
+				prodItem.setQtyInStock(temp - orderDetail.getQty());
+				productItemService.save(prodItem);
+			}
+		}
 		return shopOrderService.changeStatus(shopOrder);
 	}
 }
