@@ -8,4 +8,6 @@ public interface UserPaymentMethodService {
 
 	List<UserPaymentMethod> getUserPaymenMethodByUserId(Integer userId);
 
+	UserPaymentMethod create(UserPaymentMethod userPaymentMethod);
+
 }

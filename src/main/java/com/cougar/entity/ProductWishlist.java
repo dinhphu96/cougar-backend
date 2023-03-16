@@ -25,7 +25,7 @@ public class ProductWishlist implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	UserLogin user;
+	User user;
 	
 	@ManyToOne
 	@JoinColumn(name = "product_item_id")

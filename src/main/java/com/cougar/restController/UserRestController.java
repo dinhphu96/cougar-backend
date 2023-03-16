@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.cougar.entity.Authority;
-import com.cougar.entity.Role;
 import com.cougar.entity.RoleRegister;
 import com.cougar.entity.User;
 import com.cougar.entity.UserLogin;

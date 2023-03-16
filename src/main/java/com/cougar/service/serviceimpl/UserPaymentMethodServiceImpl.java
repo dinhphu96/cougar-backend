@@ -20,5 +20,11 @@ public class UserPaymentMethodServiceImpl implements UserPaymentMethodService{
 		// TODO Auto-generated method stub
 		return userPaymentMethodDAO.getUserPaymenMethodByUserId(userId);
 	}
+
+	@Override
+	public UserPaymentMethod create(UserPaymentMethod userPaymentMethod) {
+		// TODO Auto-generated method stub
+		return userPaymentMethodDAO.save(userPaymentMethod);
+	}
 	
 }

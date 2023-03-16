@@ -39,7 +39,7 @@ public class ShopOrder implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	UserLogin user;
+	User user;
 	
 	@ManyToOne
 	@JoinColumn(name = "address_id")

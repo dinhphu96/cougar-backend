@@ -1,6 +1,5 @@
 package com.cougar.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
