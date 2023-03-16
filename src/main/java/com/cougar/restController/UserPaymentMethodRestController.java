@@ -18,7 +18,7 @@ public class UserPaymentMethodRestController {
 	@Autowired
 	UserPaymentMethodService paymentMethodService;
 	
-	@GetMapping("/rest/UserPaymenMethods/{userId}")
+	@GetMapping("/rest/userPaymentMethods/{userId}")
 	public List<UserPaymentMethod> getUserPaymenMethodByUserId(@PathVariable("userId") Integer userId){
 		return paymentMethodService.getUserPaymenMethodByUserId(userId);
 	}
