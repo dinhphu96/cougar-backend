@@ -24,7 +24,7 @@ public class Review implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	User user;
+	UserLogin user;
 	
 	@ManyToOne
 	@JoinColumn(name = "product_item_id")

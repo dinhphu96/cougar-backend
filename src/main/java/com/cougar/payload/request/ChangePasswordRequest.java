@@ -6,5 +6,5 @@ import lombok.Data;
 public class ChangePasswordRequest {
 	private String currentPassword;
 	private String newPassword;
-	private String token;
+	private String email;
 }

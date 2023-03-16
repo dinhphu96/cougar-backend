@@ -35,7 +35,6 @@ public class User implements Serializable{
 	@Temporal(TemporalType.DATE)
 	Date createDate = new Date();
 	String avatar;
-	String resetPasswordToken;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")

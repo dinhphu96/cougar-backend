@@ -35,7 +35,7 @@ public class UserPaymentMethod implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	User user;
+	UserLogin user;
 	
 	@ManyToOne
 	@JoinColumn(name = "payment_type_id")

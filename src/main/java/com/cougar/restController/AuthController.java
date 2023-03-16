@@ -1,22 +1,18 @@
 package com.cougar.restController;
 
-import java.security.Principal;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,16 +23,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cougar.entity.UserLogin;
 import com.cougar.payload.request.ChangePasswordRequest;
+import com.cougar.payload.request.EmailRequest;
 import com.cougar.payload.request.LoginRequest;
 import com.cougar.payload.response.JwtResponseDto;
+import com.cougar.entity.ResetPasswordToken;
 import com.cougar.entity.RoleRegister;
 import com.cougar.payload.request.RegisterRequest;
+import com.cougar.payload.request.ResetPasswordRequest;
 import com.cougar.payload.response.MessageResponse;
 import com.cougar.payload.response.UserInfo;
 import com.cougar.repository.RoleRegisterDAO;
 import com.cougar.repository.UserLoginDAO;
-import com.cougar.security.UserDetailsServiceImpl;
 import com.cougar.security.jwt.JwtUtils;
+import com.cougar.service.ResetPasswordTokenService;
 import com.cougar.service.UserLoginService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -65,6 +64,9 @@ public class AuthController {
 	
 	@Autowired
 	JwtUtils jwtUtils;
+	
+	@Autowired
+	ResetPasswordTokenService resetPasswordTokenService;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -94,7 +96,7 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error occurred");
 		}
 	}
-
+	
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerUpRequest) {
 		if (userLoginDAO.existsByEmail(registerUpRequest.getEmail())) {
@@ -121,29 +123,24 @@ public class AuthController {
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	
-
-	
 	@PostMapping("/change-password")
 	public ResponseEntity<?> doChangePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
 	    try {
-	        String email = jwtUtils.getUserEmailFromJwtRefreshToken(changePasswordRequest.getToken());
-//	        System.out.println(changePasswordRequest.getToken());
-//	        System.out.println(email);
-	        UserLogin user = userLoginService.findByEmail(email);
-	        System.out.println(user);
-//	        if (user.isPresent()) {
-//	            if (pe.matches(changePasswordRequest.getCurrentPassword(), user.get().getPassword())) {
-//	                String encodedNewPassword = pe.encode(changePasswordRequest.getNewPassword());
-//	                user.get().setPassword(encodedNewPassword);
-//	                userLoginDAO.save(user.get());
-//	                return ResponseEntity.ok(new MessageResponse("Password updated successfully!"));
-//	            } else {
-//	                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Incorrect old password"));
-//	            }
-//	        } else {
-//	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
-//	        }
-	        return ResponseEntity.ok(new MessageResponse("Password updated successfully!"));
+//	        String email = jwtUtils.getUserEmailFromJwtRefreshToken(changePasswordRequest.getToken());
+	        UserLogin user = userLoginService.findByEmail(changePasswordRequest.getEmail());
+	        if (user!=null) {
+	            if (pe.matches(changePasswordRequest.getCurrentPassword(), user.getPassword())) {
+	                String encodedNewPassword = pe.encode(changePasswordRequest.getNewPassword());
+	                user.setPassword(encodedNewPassword);
+	                userLoginDAO.save(user);
+	                return ResponseEntity.ok(new MessageResponse("Password updated successfully!"));
+	            } else {
+	                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Incorrect old password"));
+	            }
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+	        }
+//	        return ResponseEntity.ok(new MessageResponse("Password updated successfully!"));
 	    } catch (ExpiredJwtException e) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Token has expired"));
 	    } catch (UnsupportedJwtException e) {
@@ -158,6 +155,36 @@ public class AuthController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Internal server error"));
 	    }
 	}
-
-
+	
+	@PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody EmailRequest email) {
+ 
+        UserLogin user = userLoginService.findByEmail(email.getEmail()); 
+        if (user == null) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Không tìm thấy người dùng với địa chỉ email này"));
+        } 
+        String token = UUID.randomUUID().toString();
+        resetPasswordTokenService.createResetPasswordTokenForUser(user, token);
+ 
+        String resetPasswordLink = "http://localhost:3000/reset-password?token=" + token;
+        String subject = "Đặt lại mật khẩu";
+        String text = "Nhấp vào đường dẫn sau để đặt lại mật khẩu của bạn: (hiệu lực 5 phút) \\n " + resetPasswordLink;
+ 
+        userLoginService.sendEmail(user.getEmail(), subject, text); 
+        return ResponseEntity.ok().body(new MessageResponse("Một liên kết đặt lại mật khẩu đã được gửi đến email của bạn!"));
+    }
+	
+	@PostMapping("reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
+        ResetPasswordToken resetPasswordToken = resetPasswordTokenService.getResetPasswordToken(req.getToken());
+       if (resetPasswordToken == null) {
+        return ResponseEntity.badRequest().body(new MessageResponse("Token không hợp lệ"));
+    } else if (resetPasswordToken.isExpired()) {
+        return ResponseEntity.badRequest().body(new MessageResponse("Token đã hết hạn"));
+    }
+        UserLogin userLogin = resetPasswordToken.getUserLogin();
+        userLogin.setPassword(pe.encode(req.getPassword()));
+        userLoginService.save(userLogin); 
+        return ResponseEntity.ok().body(new MessageResponse("Mật khẩu của bạn đã được đặt lại thành công"));
+    }
 }

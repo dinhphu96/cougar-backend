@@ -33,7 +33,7 @@ public class Address implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	User user;
+	UserLogin user;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "address")

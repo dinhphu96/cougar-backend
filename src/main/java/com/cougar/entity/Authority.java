@@ -30,4 +30,13 @@ public class Authority implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	User user;
+	
+	@Override
+	public String toString() {
+		return "Authority{" +
+				"id=" + id +
+				", role=" + role.getName() +
+				", user=" + user.getEmail() +
+				'}';
+	}
 }

@@ -42,7 +42,6 @@ public class UserLogin implements UserDetails{
 	@Temporal(TemporalType.DATE)
 	private Date createDate = new Date();
 	private String avatar;
-	private String resetPasswordToken;
 	
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -79,37 +78,31 @@ public class UserLogin implements UserDetails{
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
 		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return fullname;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	
