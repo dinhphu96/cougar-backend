@@ -55,11 +55,11 @@ public class ProductItem implements Serializable{
 	@JoinColumn(name="product_id")
 	Product product;
 	
-	@Override
-	public String toString() {
-	    return "ProductItem [id=" + id + ", price=" + price + ", instock=" + qtyInStock + ", SKU=" + SKU 
-	            + ", product=" + product.getName() 
-	            + ", reviews=" + reviews.size() + "]";
-	}
+//	@Override
+//	public String toString() {
+//	    return "ProductItem [id=" + id + ", price=" + price + ", instock=" + qtyInStock + ", SKU=" + SKU 
+//	            + ", product=" + product.getName() 
+//	            + ", reviews=" + reviews.size() + "]";
+//	}
 
 }

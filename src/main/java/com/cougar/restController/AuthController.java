@@ -26,13 +26,11 @@ import com.cougar.payload.request.ChangePasswordRequest;
 import com.cougar.payload.request.EmailRequest;
 import com.cougar.payload.request.LoginRequest;
 import com.cougar.payload.response.JwtResponseDto;
-import com.cougar.entity.ProductItem;
 import com.cougar.entity.ResetPasswordToken;
 import com.cougar.entity.Review;
 import com.cougar.entity.RoleRegister;
 import com.cougar.payload.request.RegisterRequest;
 import com.cougar.payload.request.ResetPasswordRequest;
-import com.cougar.payload.request.ReviewRequest;
 import com.cougar.payload.response.MessageResponse;
 import com.cougar.payload.response.UserInfo;
 import com.cougar.repository.RoleRegisterDAO;
@@ -198,29 +196,8 @@ public class AuthController {
     }
 	
 	@PostMapping("/review")
-	public ResponseEntity<?> createReview(@RequestBody ReviewRequest reviewRequest) {
-	    try {
-	        UserLogin user = userLoginService.findByEmail(reviewRequest.getEmail());
-	        if(user == null) {
-	        	return ResponseEntity
-						.badRequest()
-						.body(new MessageResponse("Error: User not found!"));
-	        }
-	        ProductItem productItem = productItemService.findById(reviewRequest.getProductId());
-	        System.out.println(productItem);
-	        if(productItem == null) {
-	        	return ResponseEntity
-						.badRequest()
-						.body(new MessageResponse("Error: Product not found!"));
-	        }       
-
-	        Review savedReview = new Review(user, productItem, reviewRequest.getRating(),reviewRequest.getComment());
-	        System.out.println(savedReview);
-	        return ResponseEntity.ok(reviewService.save(savedReview));
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-	    }
+	public Review createReview(@RequestBody Review review) {
+	  return reviewService.save(review);
 	}
 
 }
