@@ -1,5 +1,6 @@
 package com.cougar.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -25,13 +26,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
 import lombok.Data;
 
 @SuppressWarnings("serial")
 @Data
 @Entity
 @Table(name = "Users")
-public class UserLogin implements UserDetails{
+public class UserLogin implements UserDetails, Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -53,6 +55,7 @@ public class UserLogin implements UserDetails{
     @JsonIgnore
 	@OneToMany(mappedBy = "user")
 	List<Review> reviews;
+    
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	List<UserPaymentMethod> userPaymentMethod;	
@@ -106,6 +109,11 @@ public class UserLogin implements UserDetails{
 		return true;
 	}
 	
-	
+	@Override
+	public String toString() {
+	    return "UserLogin [id=" + id + ", fullname=" + fullname + ", phone=" + phone + ", email=" + email 
+	            + ", roles=" + roles.stream().map(RoleRegister::getName).collect(Collectors.toList()) 
+	            + ", reviews=" + reviews.size() + "]";
+	}
 
 }

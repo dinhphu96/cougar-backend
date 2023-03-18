@@ -26,16 +26,21 @@ import com.cougar.payload.request.ChangePasswordRequest;
 import com.cougar.payload.request.EmailRequest;
 import com.cougar.payload.request.LoginRequest;
 import com.cougar.payload.response.JwtResponseDto;
+import com.cougar.entity.ProductItem;
 import com.cougar.entity.ResetPasswordToken;
+import com.cougar.entity.Review;
 import com.cougar.entity.RoleRegister;
 import com.cougar.payload.request.RegisterRequest;
 import com.cougar.payload.request.ResetPasswordRequest;
+import com.cougar.payload.request.ReviewRequest;
 import com.cougar.payload.response.MessageResponse;
 import com.cougar.payload.response.UserInfo;
 import com.cougar.repository.RoleRegisterDAO;
 import com.cougar.repository.UserLoginDAO;
 import com.cougar.security.jwt.JwtUtils;
+import com.cougar.service.ProductItemService;
 import com.cougar.service.ResetPasswordTokenService;
+import com.cougar.service.ReviewService;
 import com.cougar.service.UserLoginService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -64,6 +69,12 @@ public class AuthController {
 	
 	@Autowired
 	JwtUtils jwtUtils;
+	
+	@Autowired
+	ProductItemService productItemService;
+	
+	@Autowired
+	ReviewService reviewService;
 	
 	@Autowired
 	ResetPasswordTokenService resetPasswordTokenService;
@@ -126,7 +137,6 @@ public class AuthController {
 	@PostMapping("/change-password")
 	public ResponseEntity<?> doChangePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
 	    try {
-//	        String email = jwtUtils.getUserEmailFromJwtRefreshToken(changePasswordRequest.getToken());
 	        UserLogin user = userLoginService.findByEmail(changePasswordRequest.getEmail());
 	        if (user!=null) {
 	            if (pe.matches(changePasswordRequest.getCurrentPassword(), user.getPassword())) {
@@ -140,7 +150,6 @@ public class AuthController {
 	        } else {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
 	        }
-//	        return ResponseEntity.ok(new MessageResponse("Password updated successfully!"));
 	    } catch (ExpiredJwtException e) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Token has expired"));
 	    } catch (UnsupportedJwtException e) {
@@ -187,4 +196,31 @@ public class AuthController {
         userLoginService.save(userLogin); 
         return ResponseEntity.ok().body(new MessageResponse("Your password has been reset successfully"));
     }
+	
+	@PostMapping("/review")
+	public ResponseEntity<?> createReview(@RequestBody ReviewRequest reviewRequest) {
+	    try {
+	        UserLogin user = userLoginService.findByEmail(reviewRequest.getEmail());
+	        if(user == null) {
+	        	return ResponseEntity
+						.badRequest()
+						.body(new MessageResponse("Error: User not found!"));
+	        }
+	        ProductItem productItem = productItemService.findById(reviewRequest.getProductId());
+	        System.out.println(productItem);
+	        if(productItem == null) {
+	        	return ResponseEntity
+						.badRequest()
+						.body(new MessageResponse("Error: Product not found!"));
+	        }       
+
+	        Review savedReview = new Review(user, productItem, reviewRequest.getRating(),reviewRequest.getComment());
+	        System.out.println(savedReview);
+	        return ResponseEntity.ok(reviewService.save(savedReview));
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+
 }
