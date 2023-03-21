@@ -27,7 +27,6 @@ import com.cougar.payload.request.EmailRequest;
 import com.cougar.payload.request.LoginRequest;
 import com.cougar.payload.response.JwtResponseDto;
 import com.cougar.entity.ResetPasswordToken;
-import com.cougar.entity.Review;
 import com.cougar.entity.RoleRegister;
 import com.cougar.payload.request.RegisterRequest;
 import com.cougar.payload.request.ResetPasswordRequest;
@@ -38,7 +37,6 @@ import com.cougar.repository.UserLoginDAO;
 import com.cougar.security.jwt.JwtUtils;
 import com.cougar.service.ProductItemService;
 import com.cougar.service.ResetPasswordTokenService;
-import com.cougar.service.ReviewService;
 import com.cougar.service.UserLoginService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -71,8 +69,7 @@ public class AuthController {
 	@Autowired
 	ProductItemService productItemService;
 	
-	@Autowired
-	ReviewService reviewService;
+	
 	
 	@Autowired
 	ResetPasswordTokenService resetPasswordTokenService;
@@ -194,10 +191,4 @@ public class AuthController {
         userLoginService.save(userLogin); 
         return ResponseEntity.ok().body(new MessageResponse("Your password has been reset successfully"));
     }
-	
-	@PostMapping("/review")
-	public Review createReview(@RequestBody Review review) {
-	  return reviewService.save(review);
-	}
-
 }

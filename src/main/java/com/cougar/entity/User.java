@@ -63,4 +63,18 @@ public class User implements Serializable{
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	List<ShopOrder> shopOrders;
+	
+	@Override
+	public String toString() {
+	    return "User{" +
+	            "id=" + id +
+	            ", password='" + password + '\'' +
+	            ", fullname='" + fullname + '\'' +
+	            ", phone='" + phone + '\'' +
+	            ", email='" + email + '\'' +
+	            ", avatar='" + avatar + '\'' +
+	            ", authorities=" + authorities +
+	            '}';
+	}
+
 }

@@ -1,5 +1,7 @@
 package com.cougar.service.serviceimpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,11 @@ public class ReviewServiceImpl implements ReviewService{
 	@Override
 	public Review save(Review reviewSave) {		
 		return reviewDAO.save(reviewSave);
+	}
+
+	@Override
+	public List<Review> getReviewByProduct(Integer productItem) {
+		return reviewDAO.getListReviewByProductItemId(productItem);
 	}
 
 }

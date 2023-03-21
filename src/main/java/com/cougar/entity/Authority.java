@@ -33,10 +33,11 @@ public class Authority implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Authority{" +
-				"id=" + id +
-				", role=" + role.getName() +
-				", user=" + user.getEmail() +
-				'}';
+	    return "Authority{" +
+	            "id=" + id +
+	            ", role=" + role.getName() +
+	            ", user=" + user.getEmail() +
+	            '}';
 	}
+
 }
