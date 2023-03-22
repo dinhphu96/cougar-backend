@@ -22,6 +22,7 @@ public class Contact implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
 	
+	String fullname;
 	String email;
 	String phone;
 	String content;
