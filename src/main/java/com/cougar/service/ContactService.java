@@ -10,4 +10,6 @@ public interface ContactService {
 
 	void save(Contact contact);
 
+	Contact changeStatus(Contact contact);
+
 }

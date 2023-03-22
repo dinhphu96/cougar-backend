@@ -22,5 +22,10 @@ public class ContactServiceImpl implements ContactService {
 	public void save(Contact contact) {
 		contactDAO.save(contact);
 	}
+
+	@Override
+	public Contact changeStatus(Contact contact) {
+		return contactDAO.save(contact);
+	}
 	
 }
