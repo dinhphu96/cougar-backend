@@ -33,7 +33,7 @@ public class ProductRestController {
 		return productService.findById(id);
 	}
 	
-	@PostMapping("/rest/products")
+	@PostMapping("/api/products")
 	public Product create(@RequestBody Product pr) {
 		return productService.save(pr);
 	}
