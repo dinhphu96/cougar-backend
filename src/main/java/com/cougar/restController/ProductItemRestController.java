@@ -38,7 +38,7 @@ public class ProductItemRestController {
 		return productItemService.findById(id);
 	}
 
-	@PostMapping("/rest/productItems")
+	@PostMapping("/api/productItems")
 	public ProductItem create(@RequestBody ProductItem prI) {
 		return productItemService.save(prI);
 	}
