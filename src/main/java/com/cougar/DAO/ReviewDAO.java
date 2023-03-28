@@ -22,7 +22,7 @@ public interface ReviewDAO extends JpaRepository<Review, Integer> {
 	Review findByIdReview(Integer id);
 	
 	@Modifying
-	@Query("UPDATE Review r SET r.comment = ?1, r.ratingValue = ?2, r.createDate = ?3 WHERE r.id = ?4")
+	@Query("UPDATE Review r SET r.comment = ?1, r.ratingValue = ?2, r.createDate = ?3, r.edited = true WHERE r.id = ?4")
 	void updateById(String comment, Integer ratingValue, Date newTime, Integer reviewId);
 	
 }

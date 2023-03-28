@@ -36,6 +36,8 @@ public class Review {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	Date createDate = new Date();
+	
+	Boolean edited = false;
 
 	@Override
     public String toString() {
