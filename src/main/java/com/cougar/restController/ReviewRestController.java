@@ -2,6 +2,8 @@ package com.cougar.restController;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cougar.entity.ProductItem;
 import com.cougar.entity.Review;
+import com.cougar.entity.User;
+import com.cougar.payload.response.MessageResponse;
 import com.cougar.service.ReviewService;
 
 @CrossOrigin(origins = "*")
@@ -21,20 +26,35 @@ import com.cougar.service.ReviewService;
 public class ReviewRestController {
 	@Autowired
 	ReviewService reviewService;
-	
+
 	@GetMapping("/{productId}")
 	public ResponseEntity<List<Review>> getReviewsByProductId(@PathVariable Integer productId) {
-	    List<Review> reviews = reviewService.getReviewByProduct(productId);
-	    if (reviews.isEmpty()) {
-	        return ResponseEntity.noContent().build();
-	    }
-	    System.out.println(reviews);
-	    return ResponseEntity.ok(reviews);
+		List<Review> reviews = reviewService.getReviewByProduct(productId);
+		if (reviews.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.ok(reviews);
 	}
-	
+
 	@PostMapping("/send")
-	public Review createReview(@RequestBody Review review) {
-	  return reviewService.save(review);
+	public ResponseEntity<?> createReview(@RequestBody Review review) {
+		User user = review.getUser();
+		ProductItem productItem = review.getProductItem();
+		if (reviewService.isProductReviewedByUser(user.getId(), productItem.getId())) {
+			return ResponseEntity.badRequest()
+					.body(new MessageResponse("Error: User has already reviewed this product!"));
+		} else {
+			reviewService.save(review);
+			return ResponseEntity.ok(new MessageResponse("Thanks for leaving a comment!"));
+		}
 	}
 	
+	@Transactional
+	@PostMapping("/change-review")
+	public ResponseEntity<?> updateReview(@RequestBody Review review) {
+		User user = review.getUser();
+		ProductItem product = review.getProductItem();
+		reviewService.update(review.getComment(), review.getRatingValue(), user.getId(), product.getId());
+		return ResponseEntity.ok(new MessageResponse("Update your review successfully!"));
+	}
 }
