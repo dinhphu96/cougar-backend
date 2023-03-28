@@ -12,16 +12,17 @@ import com.cougar.entity.Review;
 
 
 public interface ReviewDAO extends JpaRepository<Review, Integer> {
-	@Query(value = "SELECT * FROM Reviews r WHERE r.product_item_id = ?1 ORDER BY r.id DESC", nativeQuery = true)
+	@Query("SELECT r FROM Review r WHERE r.productItem.id = ?1 ORDER BY r.createDate DESC")
 	List<Review> getListReviewByProductItemId(Integer productItem);
 	
 	@Query(value = "SELECT * FROM Reviews r WHERE r.user_id = ?1 and r.product_item_id = ?2 ", nativeQuery = true)
 	Review findByUserAndProductItem(Integer user, Integer productItem);
 	
-	@Modifying
-	@Query("UPDATE Review r SET r.comment = ?1, r.ratingValue = ?2, r.createDate = ?3 WHERE r.user.id = ?4 and r.productItem.id = ?5")
-	void updateById(String comment, Integer ratingValue, Date newTime, Integer userId, Integer productId);
+	@Query(value = "SELECT * FROM Reviews r WHERE r.id = ?1", nativeQuery = true)
+	Review findByIdReview(Integer id);
 	
-//	@Query(value = "SELECT * FROM Reviews r WHERE  r.user_id = ?1 and r.product_item_id = ?2 ", nativeQuery = true)
-//	Review findByUserIdAndProductId(Integer userId, Integer productId);
+	@Modifying
+	@Query("UPDATE Review r SET r.comment = ?1, r.ratingValue = ?2, r.createDate = ?3 WHERE r.id = ?4")
+	void updateById(String comment, Integer ratingValue, Date newTime, Integer reviewId);
+	
 }

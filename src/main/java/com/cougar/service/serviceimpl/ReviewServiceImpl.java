@@ -33,8 +33,8 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void update(String comment, Integer ratingValue, Integer userId, Integer productId) {
-		reviewDAO.updateById(comment, ratingValue, new Date(), userId, productId);
+	public void update(String comment, Integer ratingValue, Integer reviewId) {
+		reviewDAO.updateById(comment, ratingValue, new Date(), reviewId);
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,12 +50,20 @@ public class ReviewRestController {
 		}
 	}
 	
+//	@Transactional
+//	@PostMapping("/change-review")
+//	public ResponseEntity<?> updateReview(@RequestBody Review review) {
+//		User user = review.getUser();
+//		ProductItem product = review.getProductItem();
+//		reviewService.update(review.getComment(), review.getRatingValue(), user.getId(), product.getId());
+//		return ResponseEntity.ok(new MessageResponse("Update your review successfully!"));
+//	}
+	
 	@Transactional
-	@PostMapping("/change-review")
-	public ResponseEntity<?> updateReview(@RequestBody Review review) {
-		User user = review.getUser();
-		ProductItem product = review.getProductItem();
-		reviewService.update(review.getComment(), review.getRatingValue(), user.getId(), product.getId());
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateReview(@PathVariable("id") Integer id, @RequestBody Review review) {
+		System.out.println(id);
+		reviewService.update(review.getComment(), review.getRatingValue(), id);
 		return ResponseEntity.ok(new MessageResponse("Update your review successfully!"));
 	}
 }
