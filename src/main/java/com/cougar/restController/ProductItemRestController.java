@@ -1,7 +1,10 @@
 package com.cougar.restController;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.cougar.entity.ProductConfiguration;
 import com.cougar.entity.ProductItem;
 import com.cougar.model.ProductItemColorSize;
@@ -39,13 +44,45 @@ public class ProductItemRestController {
 	}
 
 	@PostMapping("/api/productItems")
-	public ProductItem create(@RequestBody ProductItem prI) {
+	public ProductItem createFromAdmin(@RequestBody ProductItem prI) {
 		return productItemService.save(prI);
 	}
 
 	@PutMapping("/rest/productItems/{id}")
 	public ProductItem update(@PathVariable("id") Integer id, @RequestBody ProductItem prI) {
 		return productItemService.update(prI);
+	}
+
+	@PutMapping("/api/productItems")
+	public ProductItem updateFromAdmin(@RequestBody ProductItem prI) {
+
+		String urlImage = prI.getImage();
+
+		Map<String, String> config = new HashMap<>();
+
+		config.put("cloud_name", "dmjh7imwd");
+		config.put("api_key", "778777726581776");
+		config.put("api_secret", "maiZWuW_V9AF9gIfGJ7ZLHpb3z8");
+
+		Cloudinary cloud = new Cloudinary(config);
+
+		String nameImage = "product_item-image-id-" + prI.getId();
+		@SuppressWarnings("rawtypes")
+		Map params = ObjectUtils.asMap("public_id", nameImage, // Nếu trùng tên cũ sẽ ghi đè
+				"overwrite", true, "upload_preset", "cougarstrore");
+
+		try {
+			Object res = cloud.uploader().upload(urlImage, params);
+			// URL để lưu vào database
+			@SuppressWarnings("unchecked")
+			String urlUploaded = ((Map<String, String>) res).get("url")
+					.replace("http://res.cloudinary.com/dmjh7imwd/image/upload/", "");
+
+			prI.setImage(urlUploaded);
+			return productItemService.update(prI);
+		} catch (IOException exception) {
+			return null;
+		}
 	}
 
 	@DeleteMapping("/rest/productItems/{id}")

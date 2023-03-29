@@ -81,9 +81,11 @@ public class UserRestController {
 		config.put("api_secret", "maiZWuW_V9AF9gIfGJ7ZLHpb3z8");
 		Cloudinary cloudinary = new Cloudinary(config);
 		String avatarNameOnCloud = "avatar-user-id-" + adminCreated.getId();
+		@SuppressWarnings("rawtypes")
 		Map params = ObjectUtils.asMap("public_id", avatarNameOnCloud, "overwrite", true, "upload_preset", "cougarstrore");
 		try {
 			Object res = cloudinary.uploader().upload(registerUpRequest.getAvatar(), params);
+			@SuppressWarnings("unchecked")
 			String url = ((Map<String, String>) res).get("url").replace("http://res.cloudinary.com/dmjh7imwd/image/upload/", "");
 			User oldUser = userService.findById(adminCreated.getId());
 			oldUser.setAvatar(url);
@@ -132,9 +134,11 @@ public class UserRestController {
 		config.put("api_secret", "maiZWuW_V9AF9gIfGJ7ZLHpb3z8");
 		Cloudinary cloudinary = new Cloudinary(config);
 		String avatarNameOnCloud = "avatar-user-id-" + user.getId();
+		@SuppressWarnings("rawtypes")
 		Map params = ObjectUtils.asMap("public_id", avatarNameOnCloud, "overwrite", true, "upload_preset", "cougarstrore");
 		try {
 			Object res = cloudinary.uploader().upload(user.getAvatar(), params);
+			@SuppressWarnings("unchecked")
 			String url = ((Map<String, String>) res).get("url").replace("http://res.cloudinary.com/dmjh7imwd/image/upload/", "");
 			oldUser.setAvatar(url);
 			String oladPass = oldUser.getPassword();

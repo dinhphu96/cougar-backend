@@ -27,53 +27,87 @@ public class ProductRestController {
 
 	@Autowired
 	ProductService productService;
-	
+
 	@GetMapping("/rest/products")
 	public List<Product> getAll() {
 		return productService.findAll();
 	}
-	
+
 	@GetMapping("/rest/products/{id}")
 	public Product getOne(Model model, @PathVariable("id") Integer id) {
 		return productService.findById(id);
 	}
-	
+
 	@PostMapping("/api/products")
 	public Product create(@RequestBody Product pr) {
-		return productService.save(pr);
+
+		if (pr.getId() != null) {
+			return productService.save(pr);
+		} else {
+			
+			String urlImage = pr.getImage();
+			pr.setImage("change");
+			Product prd = productService.save(pr);
+
+			Map<String, String> config = new HashMap<>();
+
+			config.put("cloud_name", "dmjh7imwd");
+			config.put("api_key", "778777726581776");
+			config.put("api_secret", "maiZWuW_V9AF9gIfGJ7ZLHpb3z8");
+
+			Cloudinary cloud = new Cloudinary(config);
+
+			String nameImage = "product-image-id-" + prd.getId();
+			@SuppressWarnings("rawtypes")
+			Map params = ObjectUtils.asMap("public_id", nameImage, // Nếu trùng tên cũ sẽ ghi đè
+					"overwrite", true, "upload_preset", "cougarstrore");
+
+			try {
+				Object res = cloud.uploader().upload(urlImage, params);
+				// URL để lưu vào database
+				@SuppressWarnings("unchecked")
+				String urlUploaded = ((Map<String, String>) res).get("url")
+						.replace("http://res.cloudinary.com/dmjh7imwd/image/upload/", "");
+
+				prd.setImage(urlUploaded);
+				return productService.update(prd);
+			} catch (IOException exception) {
+				return null;
+			}
+		}
 	}
-	
+
 	@PutMapping("/api/products")
 	public Product update(@RequestBody Product pr) {
 		String urlImage = pr.getImage();
-		
+
 		Map<String, String> config = new HashMap<>();
-		
+
 		config.put("cloud_name", "dmjh7imwd");
 		config.put("api_key", "778777726581776");
 		config.put("api_secret", "maiZWuW_V9AF9gIfGJ7ZLHpb3z8");
 
 		Cloudinary cloud = new Cloudinary(config);
-		
+
 		String nameImage = "product-image-id-" + pr.getId();
-		Map params = ObjectUtils.asMap(
-		    "public_id", nameImage, // Nếu trùng tên cũ sẽ ghi đè 
-		    "overwrite", true,
-		    "upload_preset", "cougarstrore"         
-		);
-		
+		@SuppressWarnings("rawtypes")
+		Map params = ObjectUtils.asMap("public_id", nameImage, // Nếu trùng tên cũ sẽ ghi đè
+				"overwrite", true, "upload_preset", "cougarstrore");
+
 		try {
 			Object res = cloud.uploader().upload(urlImage, params);
 			// URL để lưu vào database
-			String urlUploaded = ((Map<String, String>) res).get("url").replace("http://res.cloudinary.com/dmjh7imwd/image/upload/", "");
-			
+			@SuppressWarnings("unchecked")
+			String urlUploaded = ((Map<String, String>) res).get("url")
+					.replace("http://res.cloudinary.com/dmjh7imwd/image/upload/", "");
+
 			pr.setImage(urlUploaded);
 			return productService.update(pr);
 		} catch (IOException exception) {
 			return null;
 		}
 	}
-	
+
 	@DeleteMapping("/rest/products/{id}")
 	public void delete(@PathVariable("id") Integer id) {
 		productService.delete(id);
