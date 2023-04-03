@@ -26,7 +26,7 @@ public class Contact implements Serializable {
 	String email;
 	String phone;
 	String content;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	Date createDate = new Date();
 	Boolean status;
 }

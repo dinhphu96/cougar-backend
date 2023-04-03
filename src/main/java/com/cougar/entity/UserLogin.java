@@ -41,7 +41,7 @@ public class UserLogin implements UserDetails, Serializable{
     private String fullname;
     private String phone;
     private String email;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate = new Date();
 	private String avatar;
 	

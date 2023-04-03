@@ -32,7 +32,7 @@ public class User implements Serializable{
 	String fullname;
 	String phone;
 	String email;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	Date createDate = new Date();
 	String avatar;
 	

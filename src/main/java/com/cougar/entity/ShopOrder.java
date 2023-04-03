@@ -28,7 +28,7 @@ public class ShopOrder implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	Date createDate = new Date();
 	Integer orderTotal;
 	Integer orderStatus = null;
