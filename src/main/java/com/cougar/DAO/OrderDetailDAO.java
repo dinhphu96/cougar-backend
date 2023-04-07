@@ -11,5 +11,8 @@ public interface OrderDetailDAO extends JpaRepository<OrderDetail, Integer>{
 
 	@Query("select od from OrderDetail od where od.shopOrder.id = ?1")
 	List<OrderDetail> getOrderDetailByShopId(Integer shopId);
+	
+	@Query("SELECT od FROM OrderDetail od LEFT JOIN od.shopOrder so WHERE so.user.id = ?1")
+	List<OrderDetail> findAllDetailByUserId(Integer userId);
 
 }

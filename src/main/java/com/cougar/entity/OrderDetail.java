@@ -26,7 +26,7 @@ public class OrderDetail implements Serializable {
 	Integer id;
 	Integer qty;
 	Integer price;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	Date createDate = new Date();
 
 	@ManyToOne

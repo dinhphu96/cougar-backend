@@ -16,5 +16,5 @@ public interface OrderDetailService {
 
 	List<OrderDetail> findAll();
 
-
+	List<OrderDetail> findAllByUserId(Integer userId);
 }

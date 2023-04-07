@@ -75,4 +75,9 @@ public class ShopOrderRestController {
 		}
 		return shopOrderService.changeStatus(shopOrder);
 	}
+	
+	@GetMapping("rest/shopOrders/all/{userId}")
+	public List<ShopOrder> getAllOrderByUserId(@PathVariable("userId") Integer userId){
+		return shopOrderService.getAllByUserId(userId);
+	}
 }

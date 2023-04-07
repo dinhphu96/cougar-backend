@@ -44,4 +44,10 @@ public class OrderDetailServiceImpl implements OrderDetailService{
 		return orderDetailDAO.findAll();
 	}
 
+	@Override
+	public List<OrderDetail> findAllByUserId(Integer userId) {
+		// TODO Auto-generated method stub
+		return orderDetailDAO.findAllDetailByUserId(userId);
+	}
+
 }

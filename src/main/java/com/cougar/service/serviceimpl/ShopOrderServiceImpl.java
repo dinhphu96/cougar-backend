@@ -45,4 +45,9 @@ public class ShopOrderServiceImpl implements ShopOrderService {
 		return shopOrderDAO.save(shopOrder);
 	}
 
+	@Override
+	public List<ShopOrder> getAllByUserId(Integer userId) {		
+		return shopOrderDAO.findByUserId(userId);
+	}
+
 }

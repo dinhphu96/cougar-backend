@@ -17,5 +17,6 @@ public interface ShopOrderService {
 	ShopOrder updateShopOrder(ShopOrder order);
 
 	ShopOrder changeStatus(ShopOrder shopOrder);
-
+	
+	List<ShopOrder> getAllByUserId(Integer userId);
 }

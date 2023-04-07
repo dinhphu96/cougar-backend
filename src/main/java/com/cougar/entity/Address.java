@@ -24,7 +24,7 @@ public class Address implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
-	Integer unitNumber;
+	String unitNumber;
 	String addressLine;
 	String district;
 	String province;

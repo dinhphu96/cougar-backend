@@ -34,6 +34,11 @@ public class OrderDetailRestController {
 	}
 	
 	
+	@GetMapping("/rest/orderDetails/all/{userId}")
+	public List<OrderDetail> getAllOrderDetailByUserId(@PathVariable("userId") Integer userId){
+		return orderDetailService.findAllByUserId(userId);
+	}
+	
 	@PutMapping("/rest/orderDetails/{oDID}")
 	public OrderDetail update(@PathVariable("oDID") Integer oDID, @RequestBody OrderDetail orderDetail) {
 		
