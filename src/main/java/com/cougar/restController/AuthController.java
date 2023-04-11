@@ -93,7 +93,7 @@ public class AuthController {
 					);
 	        Map<String, Object> response = new HashMap<>();
 	        response.put("SHARE_USER", userInfo);
-	        response.put("accessToken", new JwtResponseDto(jwt));			
+	        response.put("accessToken", jwt);			
 			return ResponseEntity.ok(response);
 		} catch (BadCredentialsException e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Incorrect email or password"));
