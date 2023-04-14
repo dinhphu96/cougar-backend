@@ -8,4 +8,8 @@ public interface ProductConfigurationService {
 
 	List<ProductConfiguration> findByProductItemId(Integer productItemId);
 
+	void save(ProductConfiguration con);
+
+	List<ProductConfiguration> getAll();
+
 }

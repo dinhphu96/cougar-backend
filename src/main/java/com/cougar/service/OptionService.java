@@ -7,4 +7,7 @@ import com.cougar.entity.Option;
 public interface OptionService {
 
 	List<Option> findAll();
+
+	Option create(Option option);
+
 }

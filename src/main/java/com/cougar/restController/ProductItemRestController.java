@@ -45,13 +45,43 @@ public class ProductItemRestController {
 
 	@PostMapping("/api/productItems")
 	public ProductItem createFromAdmin(@RequestBody ProductItem prI) {
-		return productItemService.save(prI);
-	}
+		if (prI.getId() == null) {
 
-	@PutMapping("/rest/productItems/{id}")
-	public ProductItem update(@PathVariable("id") Integer id, @RequestBody ProductItem prI) {
-		return productItemService.update(prI);
+			String urlImage = prI.getImage();
+
+			prI.setImage("change");
+			ProductItem prdItem = productItemService.save(prI);
+
+			Map<String, String> config = new HashMap<>();
+
+			config.put("cloud_name", "dmjh7imwd");
+			config.put("api_key", "778777726581776");
+			config.put("api_secret", "maiZWuW_V9AF9gIfGJ7ZLHpb3z8");
+
+			Cloudinary cloud = new Cloudinary(config);
+
+			String nameImage = "product_item-image-id-" + prdItem.getId();
+			@SuppressWarnings("rawtypes")
+			Map params = ObjectUtils.asMap("public_id", nameImage, // Nếu trùng tên cũ sẽ ghi đè
+					"overwrite", true, "upload_preset", "cougarstrore");
+
+			try {
+				Object res = cloud.uploader().upload(urlImage, params);
+				// URL để lưu vào database
+				@SuppressWarnings("unchecked")
+				String urlUploaded = ((Map<String, String>) res).get("url")
+						.replace("http://res.cloudinary.com/dmjh7imwd/image/upload/", "");
+
+				prdItem.setImage(urlUploaded);
+				return productItemService.update(prdItem);
+			} catch (IOException exception) {
+				return null;
+			}
+		} else {
+			return productItemService.update(prI);
+		}
 	}
+	
 
 	@PutMapping("/api/productItems")
 	public ProductItem updateFromAdmin(@RequestBody ProductItem prI) {
@@ -83,6 +113,12 @@ public class ProductItemRestController {
 		} catch (IOException exception) {
 			return null;
 		}
+	}
+	
+	
+	@PutMapping("/rest/productItems/{id}")
+	public ProductItem update(@PathVariable("id") Integer id, @RequestBody ProductItem prI) {
+		return productItemService.update(prI);
 	}
 
 	@DeleteMapping("/rest/productItems/{id}")

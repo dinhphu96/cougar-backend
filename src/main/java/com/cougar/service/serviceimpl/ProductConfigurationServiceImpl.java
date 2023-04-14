@@ -20,4 +20,16 @@ public class ProductConfigurationServiceImpl implements ProductConfigurationServ
 		// TODO Auto-generated method stub
 		return productConfigurationDAO.findByProductItemId(productItemId);
 	}
+
+	@Override
+	public void save(ProductConfiguration con) {
+		// TODO Auto-generated method stub
+		productConfigurationDAO.save(con);
+	}
+
+	@Override
+	public List<ProductConfiguration> getAll() {
+		// TODO Auto-generated method stub
+		return productConfigurationDAO.findAll();
+	}
 }

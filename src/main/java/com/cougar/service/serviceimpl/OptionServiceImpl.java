@@ -16,4 +16,9 @@ public class OptionServiceImpl implements OptionService{
 	public List<Option> findAll() {
 		return optionDAO.findAll();
 	}
+	@Override
+	public Option create(Option option) {
+		// TODO Auto-generated method stub
+		return optionDAO.save(option);
+	}
 }
