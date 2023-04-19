@@ -45,8 +45,10 @@ public class ReviewRestController {
 			return ResponseEntity.badRequest()
 					.body(new MessageResponse("Error: User has already reviewed this product!"));
 		} else {
-			reviewService.save(review);
-			return ResponseEntity.ok(new MessageResponse("Thanks for leaving a comment!"));
+			if(review.getRatingValue()==0) {
+				review.setRatingValue(5);
+			}
+			return ResponseEntity.ok(reviewService.save(review));
 		}
 	}
 	
@@ -61,9 +63,7 @@ public class ReviewRestController {
 	
 	@Transactional
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateReview(@PathVariable("id") Integer id, @RequestBody Review review) {
-		System.out.println(id);
-		reviewService.update(review.getComment(), review.getRatingValue(), id);
-		return ResponseEntity.ok(new MessageResponse("Update your review successfully!"));
+	public ResponseEntity<?> updateReview(@PathVariable("id") Integer id, @RequestBody Review review) {		
+		return ResponseEntity.ok(reviewService.update(review.getComment(), review.getRatingValue(), id));
 	}
 }
