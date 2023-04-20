@@ -25,7 +25,6 @@ import com.cougar.entity.UserLogin;
 import com.cougar.payload.request.ChangePasswordRequest;
 import com.cougar.payload.request.EmailRequest;
 import com.cougar.payload.request.LoginRequest;
-import com.cougar.payload.response.JwtResponseDto;
 import com.cougar.entity.ResetPasswordToken;
 import com.cougar.entity.RoleRegister;
 import com.cougar.payload.request.RegisterRequest;

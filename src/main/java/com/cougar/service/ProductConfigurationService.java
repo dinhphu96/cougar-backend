@@ -12,4 +12,8 @@ public interface ProductConfigurationService {
 
 	List<ProductConfiguration> getAll();
 
+	ProductConfiguration update(ProductConfiguration con);
+
+	ProductConfiguration saveNewItem(ProductConfiguration con);
+
 }
