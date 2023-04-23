@@ -167,10 +167,47 @@ public class UserRestController {
 		return ResponseEntity.ok(userService.update(user));
 	}
 
-	@PutMapping("/update/{id}")
-	public User updateUserFromShop(@PathVariable("id") Integer id, @RequestBody User user) {
-		String pass = userService.findById(id).getPassword();
+	@PutMapping("/update")
+	public User updateUserFromShop(@RequestBody User user) {
+		String pass = userService.findById(user.getId()).getPassword();
 		user.setPassword(pass);
 		return userService.update(user);
+	}
+	
+	@PutMapping("/updateWithAvatar")
+	public ResponseEntity<?> updateAdminWithAvatarFromShop(@RequestBody User user) {
+		User oldUser = userService.findById(user.getId());
+		
+		if (!user.getEmail().equals(oldUser.getEmail())) {
+			if (userLoginDAO.existsByEmail(user.getEmail())) {
+				return ResponseEntity.badRequest().body(new MessageResponse("Email already exists!"));
+			}
+		}
+		if (!user.getPhone().equals(oldUser.getPhone())) {
+			if (userLoginDAO.existsByPhone(user.getPhone())) {
+				return ResponseEntity.badRequest().body(new MessageResponse("Phone already exists!"));
+			}
+		}
+		
+		
+		Map<String, String> config = new HashMap<>();
+		config.put("cloud_name", "dmjh7imwd");
+		config.put("api_key", "778777726581776");
+		config.put("api_secret", "maiZWuW_V9AF9gIfGJ7ZLHpb3z8");
+		Cloudinary cloudinary = new Cloudinary(config);
+		String avatarNameOnCloud = "avatar-user-id-" + user.getId();
+		@SuppressWarnings("rawtypes")
+		Map params = ObjectUtils.asMap("public_id", avatarNameOnCloud, "overwrite", true, "upload_preset", "cougarstrore");
+		try {
+			Object res = cloudinary.uploader().upload(user.getAvatar(), params);
+			@SuppressWarnings("unchecked")
+			String url = ((Map<String, String>) res).get("url").replace("http://res.cloudinary.com/dmjh7imwd/image/upload/", "");
+			user.setAvatar(url);
+			String oladPass = oldUser.getPassword();
+			user.setPassword(oladPass);
+			return ResponseEntity.ok(userService.update(user));
+		} catch (IOException exception) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Có lỗi khi xử lý hình ảnh, hãy thử upload lại sau."));
+		}
 	}
 }
