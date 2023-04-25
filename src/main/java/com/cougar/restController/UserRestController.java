@@ -169,8 +169,9 @@ public class UserRestController {
 
 	@PutMapping("/update")
 	public User updateUserFromShop(@RequestBody User user) {
-		String pass = userService.findById(user.getId()).getPassword();
-		user.setPassword(pass);
+		User oldUser = userService.findById(user.getId());
+		user.setPassword(oldUser.getPassword());
+		user.setAvatar(oldUser.getAvatar());
 		return userService.update(user);
 	}
 	

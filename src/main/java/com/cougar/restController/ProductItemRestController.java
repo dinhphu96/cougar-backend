@@ -80,6 +80,8 @@ public class ProductItemRestController {
 				return null;
 			}
 		} else {
+			ProductItem oldPrI = productItemService.findById(prI.getId());
+			prI.setImage(oldPrI.getImage());
 			return productItemService.update(prI);
 		}
 	}
