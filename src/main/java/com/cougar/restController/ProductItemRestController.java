@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cloudinary.Cloudinary;
@@ -26,6 +27,7 @@ import com.cougar.service.ProductItemService;
 
 @CrossOrigin("*")
 @RestController
+@RequestMapping("/api/v1/productItems")
 public class ProductItemRestController {
 	@Autowired
 	ProductItemService productItemService;
@@ -38,12 +40,12 @@ public class ProductItemRestController {
 //		return productItemService.findAll();
 //	}
 
-	@GetMapping("/rest/productItems/{id}")
+	@GetMapping("/{id}")
 	public ProductItem getOne(@PathVariable("id") Integer id) {
 		return productItemService.findById(id);
 	}
 
-	@PostMapping("/api/productItems")
+	@PostMapping("")
 	public ProductItem createFromAdmin(@RequestBody ProductItem prI) {
 		if (prI.getId() == null) {
 
@@ -83,7 +85,7 @@ public class ProductItemRestController {
 	}
 	
 
-	@PutMapping("/api/productItems")
+	@PutMapping("")
 	public ProductItem updateFromAdmin(@RequestBody ProductItem prI) {
 
 		String urlImage = prI.getImage();
@@ -116,17 +118,17 @@ public class ProductItemRestController {
 	}
 	
 	
-	@PutMapping("/rest/productItems/{id}")
+	@PutMapping("/{id}")
 	public ProductItem update(@PathVariable("id") Integer id, @RequestBody ProductItem prI) {
 		return productItemService.update(prI);
 	}
 
-	@DeleteMapping("/rest/productItems/{id}")
+	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") Integer id) {
 		productItemService.delete(id);
 	}
 
-	@GetMapping("/rest/productItems")
+	@GetMapping("")
 	public List<ProductItemColorSize> getAll() {
 		List<ProductItemColorSize> listPr = new ArrayList<>();
 

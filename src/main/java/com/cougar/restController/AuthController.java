@@ -44,7 +44,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 	
 	@Autowired

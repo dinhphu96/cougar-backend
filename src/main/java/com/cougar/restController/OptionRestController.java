@@ -15,7 +15,7 @@ import com.cougar.service.OptionService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/options")
+@RequestMapping("/api/v1/options")
 public class OptionRestController {
 	@Autowired
 	OptionService optionService;

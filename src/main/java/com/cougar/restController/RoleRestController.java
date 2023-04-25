@@ -12,7 +12,7 @@ import com.cougar.service.RoleService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/roles")
+@RequestMapping("/api/v1/roles")
 public class RoleRestController {
 	@Autowired RoleService roleService;
 	

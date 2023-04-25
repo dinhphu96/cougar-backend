@@ -13,7 +13,7 @@ import com.cougar.service.CategoryService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/categories")
+@RequestMapping("/api/v1/categories")
 public class CategoryRestController {
 	@Autowired CategoryService categoryService;
 	

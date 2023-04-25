@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cloudinary.Cloudinary;
@@ -23,22 +24,23 @@ import com.cougar.service.ProductService;
 
 @CrossOrigin("*")
 @RestController
+@RequestMapping("/api/v1/products")
 public class ProductRestController {
 
 	@Autowired
 	ProductService productService;
 
-	@GetMapping("/rest/products")
+	@GetMapping("")
 	public List<Product> getAll() {
 		return productService.findAll();
 	}
 
-	@GetMapping("/rest/products/{id}")
+	@GetMapping("/{id}")
 	public Product getOne(Model model, @PathVariable("id") Integer id) {
 		return productService.findById(id);
 	}
 
-	@PostMapping("/api/products")
+	@PostMapping("")
 	public Product create(@RequestBody Product pr) {
 
 		if (pr.getId() != null) {
@@ -77,7 +79,7 @@ public class ProductRestController {
 		}
 	}
 
-	@PutMapping("/api/products")
+	@PutMapping("")
 	public Product update(@RequestBody Product pr) {
 		String urlImage = pr.getImage();
 

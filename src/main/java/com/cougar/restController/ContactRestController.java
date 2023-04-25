@@ -18,7 +18,7 @@ import com.cougar.service.ContactService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/contacts")
+@RequestMapping("/api/v1/contacts")
 public class ContactRestController {
 	@Autowired ContactService contactService;
 	

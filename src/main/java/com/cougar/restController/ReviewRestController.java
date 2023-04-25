@@ -23,7 +23,7 @@ import com.cougar.service.ReviewService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/rest/review")
+@RequestMapping("/api/v1/review")
 public class ReviewRestController {
 	@Autowired
 	ReviewService reviewService;

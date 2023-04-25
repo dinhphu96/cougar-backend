@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,7 @@ import com.cougar.service.ShopOrderService;
 
 @CrossOrigin("*")
 @RestController
+@RequestMapping("/api/v1/shopOrders")
 public class ShopOrderRestController {
 	
 	@Autowired
@@ -31,12 +34,12 @@ public class ShopOrderRestController {
 	@Autowired
 	ProductItemService productItemService;
 	
-	@GetMapping("/rest/shopOrders")
+	@GetMapping("")
 	public List<ShopOrder> getAll() {
 		return shopOrderService.findAll();
 	}
 	
-	@PostMapping("/rest/shopOrders")
+	@PostMapping("")
 	public ShopOrderOrderDetail cretate(@RequestBody ShopOrderOrderDetail sod) {
 		ShopOrder shop = shopOrderService.create(sod.getShopOrder());
 		OrderDetail orderDetail = sod.getOrderDetail();
@@ -46,22 +49,22 @@ public class ShopOrderRestController {
 		return shopOr;
 	}
 	
-	@GetMapping("/rest/shopOrders/{userId}")
+	@GetMapping("/{userId}")
 	public ShopOrder findCartByUserId(@PathVariable("userId") Integer userId) {
 		return shopOrderService.findCartByUserId(userId);
 	}
 	
-	@DeleteMapping("/rest/shopOrders/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable("id") Integer id) {
 		shopOrderService.deleteById(id);
 	}
 	
-	@PutMapping("/rest/shopOrders/{orderId}")
+	@PutMapping("/{orderId}")
 	public ShopOrder updateShopOrder(@PathVariable("orderId") Integer orderId,@RequestBody ShopOrder order) {
 		return shopOrderService.updateShopOrder(order);
 	}
 	
-	@PutMapping("/rest/shopOrders/changeStatus")
+	@PutMapping("/changeStatus")
 	public ShopOrder changeStatus(@RequestBody ShopOrder shopOrder) {
 		if (shopOrder.getOrderStatus() == 3) {
 			List<OrderDetail> orderDetails = orderDetailService.findAll();
@@ -76,7 +79,7 @@ public class ShopOrderRestController {
 		return shopOrderService.changeStatus(shopOrder);
 	}
 	
-	@GetMapping("rest/shopOrders/all/{userId}")
+	@GetMapping("/all/{userId}")
 	public List<ShopOrder> getAllOrderByUserId(@PathVariable("userId") Integer userId){
 		return shopOrderService.getAllByUserId(userId);
 	}

@@ -13,7 +13,7 @@ import com.cougar.service.AuthorityService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/authorities")
+@RequestMapping("/api/v1/authorities")
 public class AuthorityRestController {
 	@Autowired AuthorityService authorityService;
 

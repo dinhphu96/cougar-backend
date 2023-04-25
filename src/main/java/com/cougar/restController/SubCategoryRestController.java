@@ -13,7 +13,7 @@ import com.cougar.service.SubcategoryService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/subCategories")
+@RequestMapping("/api/v1/subCategories")
 public class SubCategoryRestController {
 	@Autowired SubcategoryService subcategoryService;
 	

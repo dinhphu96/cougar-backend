@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cougar.entity.Address;
@@ -17,32 +18,33 @@ import com.cougar.service.AddressService;
 
 @CrossOrigin("*")
 @RestController
+@RequestMapping("/api/v1/addresses")
 public class AddessesRestController {
 	
 	@Autowired
 	AddressService addressService;
 
-	@GetMapping("/rest/addresses/{userId}")
+	@GetMapping("/{userId}")
 	public List<Address> getAddressesByUsserId(@PathVariable("userId") Integer userId){
 		return addressService.getAddressesByUsserId(userId);
 	}
 	
-	@PostMapping("/rest/addresses")
+	@PostMapping("")
 	public Address create(@RequestBody Address address) {
 		return addressService.create(address);
 	}
 	
-	@PutMapping("/rest/addresses/{id}")
+	@PutMapping("/{id}")
 	public Address update(@PathVariable("id") Integer id, @RequestBody Address address) {
 		return addressService.create(address); //update
 	}
 	
-	@DeleteMapping("/rest/addresses/{id}")
+	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") Integer id) {
 		addressService.delete(id);
 	}
 	
-	@PutMapping("/rest/addresses/setAsDefault")
+	@PutMapping("/setAsDefault")
 	public List<Address> setAsDefault(@RequestBody Address address){
 		List<Address> list = addressService.getAddressesByUsserId(address.getUser().getId());
 		
