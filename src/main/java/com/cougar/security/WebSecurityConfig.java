@@ -55,6 +55,8 @@ public class WebSecurityConfig {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and().authorizeRequests()
+				.antMatchers("/api/v1/shopOrders/all/**").authenticated()
+				.antMatchers("/api/v1/authorities/all/**").hasRole("ADMIN")				
 				.anyRequest().permitAll();
 
 		http.authenticationProvider(authenticationProvider());
